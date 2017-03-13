@@ -14,6 +14,9 @@
 
         </ul>
 
+        <br/>
+        <button id="logout">Logout</button>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script type="text/javascript">
 	        
@@ -40,7 +43,11 @@
                 });
             }
 
-
+            $("#logout").click(function(){
+                console.log("Logout");
+                sessionStorage.removeItem('auth_token');
+                location.reload();
+            });
 
         </script>
     </body>
