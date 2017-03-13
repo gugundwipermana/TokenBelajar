@@ -21,6 +21,10 @@ import com.gudperna.model.User;
 
 import org.glassfish.jersey.internal.util.Base64;
 
+import org.json.JSONObject;
+import org.json.JSONException;
+
+
 @Path("auth")
 public class AuthRest {
 
@@ -29,20 +33,28 @@ public class AuthRest {
 	@POST
 	@Path("login")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response login(User user) {
+    public String login(User user) {
 
-        Response resp;
     	if(userService.cekUser(user)) {
 
     		String email = user.getEmail();
 			String password = user.getPassword();
 
-    		resp = Response.ok("Basic "+Base64.encodeAsString(email+":"+password)).build();
-    	} else {
-    		resp = Response.ok("Login error ").build();
-    	}
+    		String token = Base64.encodeAsString(email+":"+password);
 
-    	return resp;
+    		try {
+    			return new JSONObject().put("status", "success").put("token", "Basic "+token).toString();
+    		} catch (JSONException e) {
+    			return null;
+    		}
+
+    	} else {
+    		try {
+    			return new JSONObject().put("status", "error").toString();
+    		} catch (JSONException e) {
+    			return null;
+    		}
+    	}
     }
 	
 }
